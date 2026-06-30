@@ -4,7 +4,6 @@ import '../../../domain/entities/user_entity.dart';
 import '../../../domain/usecases/auth/verify_firebase_token_usecase.dart';
 import '../../../domain/usecases/auth/get_me_usecase.dart';
 import '../../../domain/usecases/auth/logout_usecase.dart';
-import '../../../domain/usecases/auth/send_otp_usecase.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../../../core/error/failures.dart';
 
@@ -15,13 +14,16 @@ abstract class AuthEvent extends Equatable {
 }
 
 class AuthCheckRequested extends AuthEvent {}
+
 class AuthLoginWithFirebase extends AuthEvent {
   final String firebaseToken;
   AuthLoginWithFirebase(this.firebaseToken);
   @override
   List<Object?> get props => [firebaseToken];
 }
+
 class AuthLogoutRequested extends AuthEvent {}
+
 class AuthUpdateFcmToken extends AuthEvent {
   final String fcmToken;
   AuthUpdateFcmToken(this.fcmToken);
@@ -36,14 +38,18 @@ abstract class AuthState extends Equatable {
 }
 
 class AuthInitial extends AuthState {}
+
 class AuthLoading extends AuthState {}
+
 class AuthAuthenticated extends AuthState {
   final UserEntity user;
   AuthAuthenticated(this.user);
   @override
   List<Object?> get props => [user];
 }
+
 class AuthUnauthenticated extends AuthState {}
+
 class AuthNeedsVerification extends AuthState {
   final UserEntity user;
   final String token;
@@ -51,6 +57,7 @@ class AuthNeedsVerification extends AuthState {
   @override
   List<Object?> get props => [user, token];
 }
+
 class AuthError extends AuthState {
   final String message;
   AuthError(this.message);
@@ -80,7 +87,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthUpdateFcmToken>(_onUpdateFcm);
   }
 
-  Future<void> _onCheckRequested(AuthCheckRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onCheckRequested(
+      AuthCheckRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final token = await _authRepo.getSavedToken();
     if (token == null) {
@@ -106,7 +114,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthAuthenticated(user));
   }
 
-  Future<void> _onLoginWithFirebase(AuthLoginWithFirebase event, Emitter<AuthState> emit) async {
+  Future<void> _onLoginWithFirebase(
+      AuthLoginWithFirebase event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
       final result = await _verifyToken(event.firebaseToken);
@@ -122,12 +131,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onLogout(AuthLogoutRequested event, Emitter<AuthState> emit) async {
+  Future<void> _onLogout(
+      AuthLogoutRequested event, Emitter<AuthState> emit) async {
     await _logout();
     emit(AuthUnauthenticated());
   }
 
-  Future<void> _onUpdateFcm(AuthUpdateFcmToken event, Emitter<AuthState> emit) async {
+  Future<void> _onUpdateFcm(
+      AuthUpdateFcmToken event, Emitter<AuthState> emit) async {
     await _authRepo.updateFcmToken(event.fcmToken);
   }
 }

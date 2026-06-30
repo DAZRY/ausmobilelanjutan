@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:app_links/app_links.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,33 +30,37 @@ class DeeplinkPaymentData {
   factory DeeplinkPaymentData.fromUri(Uri uri) {
     final q = uri.queryParameters;
 
-    final merchantId   = q['merchant_id'];
+    final merchantId = q['merchant_id'];
     final merchantName = q['merchant_name'];
-    final amountStr    = q['amount'];
+    final amountStr = q['amount'];
 
     if (merchantId == null || merchantId.trim().isEmpty) {
-      throw const FormatException('Link pembayaran tidak valid: merchant_id tidak ditemukan.');
+      throw const FormatException(
+          'Link pembayaran tidak valid: merchant_id tidak ditemukan.');
     }
     if (merchantName == null || merchantName.trim().isEmpty) {
-      throw const FormatException('Link pembayaran tidak valid: merchant_name tidak ditemukan.');
+      throw const FormatException(
+          'Link pembayaran tidak valid: merchant_name tidak ditemukan.');
     }
     if (amountStr == null || amountStr.trim().isEmpty) {
-      throw const FormatException('Link pembayaran tidak valid: amount tidak ditemukan.');
+      throw const FormatException(
+          'Link pembayaran tidak valid: amount tidak ditemukan.');
     }
 
     final amount = double.tryParse(amountStr);
     if (amount == null || amount <= 0) {
-      throw const FormatException('Link pembayaran tidak valid: amount harus berupa angka > 0.');
+      throw const FormatException(
+          'Link pembayaran tidak valid: amount harus berupa angka > 0.');
     }
 
     return DeeplinkPaymentData(
-      merchantId:   merchantId,
+      merchantId: merchantId,
       merchantName: merchantName,
-      amount:       amount,
-      description:  q['description']?.trim().isNotEmpty == true
+      amount: amount,
+      description: q['description']?.trim().isNotEmpty == true
           ? q['description']!.trim()
           : 'Pembayaran ke $merchantName',
-      reference:   q['reference'],
+      reference: q['reference'],
       callbackUrl: q['callback'],
     );
   }
@@ -116,9 +119,11 @@ class DeeplinkService {
     _subscription = _appLinks.uriLinkStream.listen(
       _handleInAppUri,
       onError: (e) => debugPrint('[DeeplinkService] stream error: $e'),
-      onDone: () => debugPrint('[DeeplinkService] stream DITUTUP (seharusnya tidak terjadi)'),
+      onDone: () => debugPrint(
+          '[DeeplinkService] stream DITUTUP (seharusnya tidak terjadi)'),
     );
-    debugPrint('[DeeplinkService] uriLinkStream aktif — subscription: $_subscription');
+    debugPrint(
+        '[DeeplinkService] uriLinkStream aktif — subscription: $_subscription');
   }
 
   /// Simpan URI cold-start sebagai pending (belum navigasi).
@@ -143,7 +148,8 @@ class DeeplinkService {
 
     try {
       final data = DeeplinkPaymentData.fromUri(uri);
-      debugPrint('[DeeplinkService] Jadwal navigasi /pay — ${data.merchantName} ${data.amount}');
+      debugPrint(
+          '[DeeplinkService] Jadwal navigasi /pay — ${data.merchantName} ${data.amount}');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         debugPrint('[DeeplinkService] router.go("/pay") dieksekusi');
         _router.go('/pay', extra: data);

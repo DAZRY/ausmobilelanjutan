@@ -6,7 +6,6 @@ import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/otp_bloc.dart';
-import '../../widgets/app_button.dart';
 import '../../widgets/code_input.dart';
 import '../../widgets/feature_icon.dart';
 
@@ -34,8 +33,10 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
     _countdown?.cancel();
     setState(() => _timer = AppConstants.otpResendSeconds);
     _countdown = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (_timer <= 0) t.cancel();
-      else setState(() => _timer--);
+      if (_timer <= 0)
+        t.cancel();
+      else
+        setState(() => _timer--);
     });
   }
 
@@ -46,9 +47,14 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
   }
 
   void _onCodeChanged(String v) {
-    setState(() { _code = v; _hasError = false; });
+    setState(() {
+      _code = v;
+      _hasError = false;
+    });
     if (v.length == 6) {
-      context.read<OtpBloc>().add(OtpConfirm(code: v, otpType: AppConstants.otpTypeEmail));
+      context
+          .read<OtpBloc>()
+          .add(OtpConfirm(code: v, otpType: AppConstants.otpTypeEmail));
     }
   }
 
@@ -64,13 +70,20 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
             context.go('/home');
           }
         } else if (state is OtpInvalid) {
-          setState(() { _hasError = true; });
+          setState(() {
+            _hasError = true;
+          });
           Future.delayed(const Duration(milliseconds: 650), () {
-            if (mounted) setState(() { _code = ''; _hasError = false; });
+            if (mounted)
+              setState(() {
+                _code = '';
+                _hasError = false;
+              });
           });
         } else if (state is OtpError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: AppColors.red),
+            SnackBar(
+                content: Text(state.message), backgroundColor: AppColors.red),
           );
         }
       },
@@ -83,7 +96,8 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
                 alignment: Alignment.topLeft,
                 child: IconButton(
                   icon: const Icon(DkgIcons.arrowLeft, color: AppColors.ink),
-                  onPressed: () => context.go(widget.mode == 'setup' ? '/setup-2fa' : '/login'),
+                  onPressed: () => context
+                      .go(widget.mode == 'setup' ? '/setup-2fa' : '/login'),
                 ),
               ),
               Expanded(
@@ -91,7 +105,11 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
                   padding: const EdgeInsets.fromLTRB(28, 8, 28, 24),
                   child: Column(
                     children: [
-                      const FeatureIcon(icon: DkgIcons.mail, tone: 'blue', size: 74, iconSize: 36),
+                      const FeatureIcon(
+                          icon: DkgIcons.mail,
+                          tone: 'blue',
+                          size: 74,
+                          iconSize: 36),
                       const SizedBox(height: 18),
                       const Text('Masukkan Email OTP',
                           style: TextStyle(
@@ -104,12 +122,20 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
                       const SizedBox(height: 8),
                       const Text('Kode 6 digit dikirim ke email kamu via SMTP',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14.5, color: AppColors.slate500, height: 1.55)),
+                          style: TextStyle(
+                              fontSize: 14.5,
+                              color: AppColors.slate500,
+                              height: 1.55)),
                       const SizedBox(height: 28),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 80),
-                        transform: _hasError ? (Matrix4.identity()..translate(8.0)) : Matrix4.identity(),
-                        child: CodeInput(value: _code, onChanged: _onCodeChanged, hasError: _hasError),
+                        transform: _hasError
+                            ? (Matrix4.identity()..translate(8.0))
+                            : Matrix4.identity(),
+                        child: CodeInput(
+                            value: _code,
+                            onChanged: _onCodeChanged,
+                            hasError: _hasError),
                       ),
                       if (_hasError) ...[
                         const SizedBox(height: 12),
@@ -123,7 +149,8 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
                       ],
                       const SizedBox(height: 18),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 13, vertical: 8),
                         decoration: BoxDecoration(
                           color: AppColors.amberSurface,
                           borderRadius: BorderRadius.circular(12),
@@ -131,7 +158,8 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: const [
-                            Icon(DkgIcons.info, size: 16, color: Color(0xFFB5760B)),
+                            Icon(DkgIcons.info,
+                                size: 16, color: Color(0xFFB5760B)),
                             SizedBox(width: 8),
                             Text('Cek email inbox atau spam kamu',
                                 style: TextStyle(
@@ -147,14 +175,16 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
                       _timer > 0
                           ? Text(
                               'Kirim ulang dalam 00:${_timer.toString().padLeft(2, '0')}',
-                              style: const TextStyle(fontSize: 13.5, color: AppColors.slate400),
+                              style: const TextStyle(
+                                  fontSize: 13.5, color: AppColors.slate400),
                             )
                           : TextButton.icon(
                               onPressed: () {
                                 context.read<OtpBloc>().add(OtpSendEmail());
                                 _startTimer();
                               },
-                              icon: const Icon(DkgIcons.refresh, size: 16, color: AppColors.primary),
+                              icon: const Icon(DkgIcons.refresh,
+                                  size: 16, color: AppColors.primary),
                               label: const Text('Kirim ulang kode',
                                   style: TextStyle(
                                     fontFamily: 'PlusJakartaSans',

@@ -8,14 +8,14 @@ import '../../widgets/app_avatar.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/app_field.dart';
 import '../../widgets/app_top_bar.dart';
-import '../../widgets/feature_icon.dart';
 import '../../widgets/num_pad.dart';
 
 class TransferAmountPage extends StatefulWidget {
   final Map<String, dynamic> recipient;
   final String channel;
 
-  const TransferAmountPage({super.key, required this.recipient, required this.channel});
+  const TransferAmountPage(
+      {super.key, required this.recipient, required this.channel});
 
   @override
   State<TransferAmountPage> createState() => _TransferAmountPageState();
@@ -52,7 +52,8 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppTopBar(title: 'Nominal Transfer', onBack: () => context.go('/transfer')),
+      appBar: AppTopBar(
+          title: 'Nominal Transfer', onBack: () => context.go('/transfer')),
       body: Column(
         children: [
           Padding(
@@ -61,7 +62,8 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
               children: [
                 // Recipient card
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   decoration: BoxDecoration(
                     color: AppColors.bg,
                     borderRadius: BorderRadius.circular(16),
@@ -86,7 +88,9 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
                                     )),
                               ),
                             )
-                          : AppAvatar(name: widget.recipient['name'] as String, size: 42),
+                          : AppAvatar(
+                              name: widget.recipient['name'] as String,
+                              size: 42),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -104,11 +108,13 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
                               ),
                             ),
                             Text(widget.recipient['sub'] as String,
-                                style: const TextStyle(fontSize: 12.5, color: AppColors.slate400)),
+                                style: const TextStyle(
+                                    fontSize: 12.5, color: AppColors.slate400)),
                           ],
                         ),
                       ),
-                      const Icon(Icons.verified_user_outlined, size: 20, color: AppColors.green),
+                      const Icon(Icons.verified_user_outlined,
+                          size: 20, color: AppColors.green),
                     ],
                   ),
                 ),
@@ -119,7 +125,11 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
                   child: Column(
                     children: [
                       const Text('Nominal',
-                          style: TextStyle(fontFamily: 'PlusJakartaSans', fontSize: 13, color: AppColors.slate400, fontWeight: FontWeight.w600)),
+                          style: TextStyle(
+                              fontFamily: 'PlusJakartaSans',
+                              fontSize: 13,
+                              color: AppColors.slate400,
+                              fontWeight: FontWeight.w600)),
                       const SizedBox(height: 6),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -131,7 +141,9 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
                                 fontFamily: 'PlusJakartaSans',
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700,
-                                color: _amount > 0 ? AppColors.ink : AppColors.slate300,
+                                color: _amount > 0
+                                    ? AppColors.ink
+                                    : AppColors.slate300,
                               )),
                           Text(
                             _amount > 0 ? _amount.toLocaleString() : '0',
@@ -139,7 +151,9 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
                               fontFamily: 'PlusJakartaSans',
                               fontSize: 42,
                               fontWeight: FontWeight.w800,
-                              color: _amount > 0 ? AppColors.ink : AppColors.slate300,
+                              color: _amount > 0
+                                  ? AppColors.ink
+                                  : AppColors.slate300,
                               letterSpacing: -1,
                             ),
                           ),
@@ -147,7 +161,9 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        enough ? 'Saldo: ${CurrencyFormatter.format(balance)}' : 'Saldo tidak cukup',
+                        enough
+                            ? 'Saldo: ${CurrencyFormatter.format(balance)}'
+                            : 'Saldo tidak cukup',
                         style: TextStyle(
                           fontFamily: 'PlusJakartaSans',
                           fontSize: 12.5,
@@ -158,24 +174,28 @@ class _TransferAmountPageState extends State<TransferAmountPage> {
                       const SizedBox(height: 16),
                       Wrap(
                         spacing: 8,
-                        children: _chips.map((c) => GestureDetector(
-                          onTap: () => setState(() => _amount = c),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: AppColors.line, width: 1.4),
-                            ),
-                            child: Text(CurrencyFormatter.formatInt(c),
-                                style: const TextStyle(
-                                  fontFamily: 'PlusJakartaSans',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.slate600,
-                                )),
-                          ),
-                        )).toList(),
+                        children: _chips
+                            .map((c) => GestureDetector(
+                                  onTap: () => setState(() => _amount = c),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                          color: AppColors.line, width: 1.4),
+                                    ),
+                                    child: Text(CurrencyFormatter.formatInt(c),
+                                        style: const TextStyle(
+                                          fontFamily: 'PlusJakartaSans',
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.slate600,
+                                        )),
+                                  ),
+                                ))
+                            .toList(),
                       ),
                     ],
                   ),
