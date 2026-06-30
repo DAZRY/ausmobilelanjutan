@@ -24,6 +24,8 @@ func Setup(db *gorm.DB, rdb *redis.Client, firebaseApp *firebase.App, cfg *confi
 	authHandler := handlers.NewAuthHandler(db, firebaseApp, jwtSvc, otpSvc, cfg)
 	otpHandler := handlers.NewOTPHandler(db, otpSvc)
 	paymentHandler := handlers.NewPaymentHandler(db, otpSvc)
+	productHandler := handlers.NewProductHandler(db)
+	cartHandler := handlers.NewCartHandler(db)
 
 	v1 := r.Group("/v1")
 	{
@@ -39,6 +41,7 @@ func Setup(db *gorm.DB, rdb *redis.Client, firebaseApp *firebase.App, cfg *confi
 			{
 				authRequired.GET("/me", authHandler.Me)
 				authRequired.PUT("/fcm-token", authHandler.UpdateFCMToken)
+				authRequired.POST("/fcm-token", authHandler.UpdateFCMToken)
 				authRequired.POST("/verify-email-otp", authHandler.VerifyEmailOTP)
 			}
 		}
@@ -69,6 +72,20 @@ func Setup(db *gorm.DB, rdb *redis.Client, firebaseApp *firebase.App, cfg *confi
 		{
 			payment.POST("/topup", paymentHandler.TopUp)
 			payment.POST("/transfer", paymentHandler.Transfer)
+		}
+
+		products := v1.Group("/products")
+		{
+			products.GET("", productHandler.GetProducts)
+			products.GET("/:id", productHandler.GetProductByID)
+		}
+
+		cart := v1.Group("/cart")
+		cart.Use(middleware.AuthMiddleware(jwtSvc))
+		{
+			cart.GET("", cartHandler.GetCart)
+			cart.POST("", cartHandler.AddToCart)
+			cart.DELETE("/:id", cartHandler.RemoveFromCart)
 		}
 	}
 
