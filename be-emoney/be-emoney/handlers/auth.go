@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"time"
 
@@ -274,13 +275,12 @@ func (h *AuthHandler) RegisterWithOTP(c *gin.Context) {
 		return
 	}
 
-	if err := h.otpSvc.SendEmailOTP(ctx, &user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"success": false,
-			"message": "Gagal mengirim OTP ke email: " + err.Error(),
-		})
-		return
-	}
+	// Kirim email OTP async supaya response nggak nunggu SMTP
+	go func() {
+		if err := h.otpSvc.SendEmailOTP(context.Background(), &user); err != nil {
+			log.Printf("Gagal kirim OTP ke %s: %v", user.Email, err)
+		}
+	}()
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
