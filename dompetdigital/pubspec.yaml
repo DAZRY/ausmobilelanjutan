@@ -26,6 +26,16 @@ dependencies:
 
   # Networking
   dio: ^5.7.0
+  pretty_dio_logger: ^1.4.0
+
+  # Deeplink
+  app_links: ^6.1.1
+
+  # Auth
+  google_sign_in: ^6.2.2
+
+  # Scanner
+  mobile_scanner: ^6.0.2
 
   # Local Storage
   flutter_secure_storage: ^9.2.4
