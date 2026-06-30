@@ -33,6 +33,8 @@ func InitMySQL(cfg *config.Config) *gorm.DB {
 		&models.OTP{},
 		&models.Account{},
 		&models.Transaction{},
+		&models.Product{},
+		&models.Cart{},
 	); err != nil {
 		log.Fatal("Failed to migrate database:", err)
 	}
