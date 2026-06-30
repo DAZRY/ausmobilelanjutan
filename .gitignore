@@ -118,3 +118,9 @@ app.*.map.json
 # Build
 **/dist/
 **/build/
+
+# Firebase / Google Cloud credentials
+**/firebase_service_account.json
+**/service-account*.json
+**/google-services.json
+**/GoogleService-Info.plist
