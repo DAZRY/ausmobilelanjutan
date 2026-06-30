@@ -1,0 +1,22 @@
+name: flutter_biometric_kit
+description: >
+  Reusable Flutter library for biometric authentication (fingerprint & face)
+  using local_auth v3.x. Wraps LocalAuthentication with typed error handling
+  and actionable error codes.
+version: 1.0.0
+homepage: https://github.com/iketutg/flutter_biometric_kit
+
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.11.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  local_auth: ^3.0.1
+  local_auth_android: ^2.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
