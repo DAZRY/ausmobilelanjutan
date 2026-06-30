@@ -1,0 +1,68 @@
+name: dompetdigital
+description: Dompet Kampus Global - Aplikasi Dompet Digital
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^3.8.1
+  firebase_auth: ^5.4.1
+  cloud_firestore: ^5.6.1
+
+  # State Management
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.7
+
+  # Dependency Injection
+  get_it: ^8.0.2
+
+  # Networking
+  dio: ^5.7.0
+
+  # Local Storage
+  flutter_secure_storage: ^9.2.4
+  shared_preferences: ^2.3.4
+
+  # Router
+  go_router: ^14.8.1
+
+  # UI
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.16
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  lottie: ^3.2.0
+
+  # Utils
+  intl: ^0.19.0
+  url_launcher: ^6.3.1
+  permission_handler: ^11.3.1
+  package_info_plus: ^8.1.3
+
+  # 2FA
+  pqr: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.14
+  json_serializable: ^6.9.2
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
