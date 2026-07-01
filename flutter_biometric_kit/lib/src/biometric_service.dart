@@ -1,44 +1,33 @@
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 
 import 'biometric_exception.dart';
 
-/// Tipe biometrik yang didukung.
-enum BiometricType { fingerprint, face, iris, weak, strong, unknown }
-
-/// Layanan autentikasi biometrik berbasis MethodChannel.
-///
-/// Tidak bergantung pada package `local_auth` — menggunakan channel
-/// native langsung sehingga bisa dipakai sebagai library mandiri.
 class BiometricService {
-  static const MethodChannel _channel =
-      MethodChannel('flutter_biometric_kit/auth');
+  final LocalAuthentication _auth = LocalAuthentication();
 
   /// Cek apakah device mendukung dan memiliki sensor biometrik.
   Future<bool> isBiometricAvailable() async {
     try {
-      final bool canCheck =
-          await _channel.invokeMethod<bool>('canCheckBiometrics') ?? false;
-      final bool isSupported =
-          await _channel.invokeMethod<bool>('isDeviceSupported') ?? false;
+      final bool canCheck = await _auth.canCheckBiometrics;
+      final bool isSupported = await _auth.isDeviceSupported();
       return canCheck && isSupported;
-    } on PlatformException catch (e) {
-      print('[BiometricService] isBiometricAvailable error: $e');
+    } on LocalAuthException catch (e) {
+      debugPrint('[BiometricService] isBiometricAvailable error: $e');
       return false;
     }
   }
 
   /// Mengembalikan daftar jenis biometrik yang terdaftar di perangkat.
   ///
-  /// Android: `weak` = face 2D, `strong` = fingerprint/iris
-  /// iOS:     `face` = Face ID, `fingerprint` = Touch ID
+  /// Android: [BiometricType.weak] = face 2D, [BiometricType.strong] = fingerprint/iris
+  /// iOS:     [BiometricType.face] = Face ID, [BiometricType.fingerprint] = Touch ID
   Future<List<BiometricType>> getAvailableBiometrics() async {
     try {
-      final List<dynamic>? types =
-          await _channel.invokeMethod<List<dynamic>>('getAvailableBiometrics');
-      if (types == null) return [];
-      return types.map((e) => _parseBiometricType(e as String)).toList();
-    } on PlatformException catch (e) {
-      print('[BiometricService] getAvailableBiometrics error: $e');
+      return await _auth.getAvailableBiometrics();
+    } on LocalAuthException catch (e) {
+      debugPrint('[BiometricService] getAvailableBiometrics error: $e');
       return [];
     }
   }
@@ -71,18 +60,19 @@ class BiometricService {
     }
 
     try {
-      final Map<String, dynamic> args = <String, dynamic>{
-        'reason': reason,
-        'biometricOnly': false,
-        'sensitiveTransaction': true,
-        'persistAcrossBackgrounding': true,
-        'androidTitle': 'Verifikasi Diperlukan',
-        'androidCancelButton': 'Batal',
-        'androidSignInHint': 'Tempelkan jari atau arahkan wajah',
-      };
-
-      final bool result =
-          await _channel.invokeMethod<bool>('authenticate', args) ?? false;
+      final bool result = await _auth.authenticate(
+        localizedReason: reason,
+        authMessages: const <AuthMessages>[
+          AndroidAuthMessages(
+            signInTitle: 'Verifikasi Diperlukan',
+            cancelButton: 'Batal',
+            signInHint: 'Tempelkan jari atau arahkan wajah',
+          ),
+        ],
+        biometricOnly: false,
+        sensitiveTransaction: true,
+        persistAcrossBackgrounding: true,
+      );
 
       if (!result) {
         throw BiometricException(
@@ -93,11 +83,8 @@ class BiometricService {
       }
 
       return true;
-    } on PlatformException catch (e) {
-      throw BiometricException.fromPlatform(
-        e.code,
-        e.message,
-      );
+    } on LocalAuthException catch (e) {
+      throw BiometricException.fromLocalAuthException(e);
     } on BiometricException {
       rethrow;
     } catch (e) {
@@ -111,23 +98,6 @@ class BiometricService {
 
   /// Menghentikan autentikasi yang sedang berjalan (Android only).
   Future<void> stopAuthentication() async {
-    await _channel.invokeMethod<void>('stopAuthentication');
-  }
-
-  BiometricType _parseBiometricType(String value) {
-    switch (value) {
-      case 'fingerprint':
-        return BiometricType.fingerprint;
-      case 'face':
-        return BiometricType.face;
-      case 'iris':
-        return BiometricType.iris;
-      case 'weak':
-        return BiometricType.weak;
-      case 'strong':
-        return BiometricType.strong;
-      default:
-        return BiometricType.unknown;
-    }
+    await _auth.stopAuthentication();
   }
 }
