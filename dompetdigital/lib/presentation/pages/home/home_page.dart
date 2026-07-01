@@ -68,14 +68,14 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             AppAvatar(
                                 name: fullName,
-                                size: 44,
+                                size: 48,
                                 bg: Colors.white.withValues(alpha: 0.25)),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Selamat siang,',
+                                  const Text('Selamat datang,',
                                       style: TextStyle(
                                         fontFamily: 'PlusJakartaSans',
                                         fontSize: 13,
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                                   Text('$firstName ',
                                       style: const TextStyle(
                                         fontFamily: 'PlusJakartaSans',
-                                        fontSize: 17,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w800,
                                         color: Colors.white,
                                         letterSpacing: -0.2,
@@ -92,32 +92,33 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             ),
-                            Stack(
-                              children: [
-                                Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.18),
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: const Icon(Icons.notifications_outlined,
-                                      size: 21, color: Colors.white),
-                                ),
-                                Positioned(
-                                  top: 10,
-                                  right: 11,
-                                  child: Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.amber,
-                                      shape: BoxShape.circle,
-                                      border: Border.all(color: Colors.white, width: 2),
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.18),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  const Icon(Icons.notifications_outlined,
+                                      size: 22, color: Colors.white),
+                                  Positioned(
+                                    top: 10,
+                                    right: 11,
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.amber,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(color: Colors.white, width: 2),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -172,7 +173,14 @@ class _HomePageState extends State<HomePage> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white,
+            AppColors.primarySurface.withValues(alpha: 0.3),
+          ],
+        ),
         borderRadius: BorderRadius.circular(22),
         boxShadow: AppColors.shadowCard,
       ),
@@ -183,14 +191,14 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 children: [
-                  const AppLogo(size: 26),
-                  const SizedBox(width: 7),
+                  const AppLogo(size: 28),
+                  const SizedBox(width: 8),
                   const Text('Saldo DKG',
                       style: TextStyle(
                         fontFamily: 'PlusJakartaSans',
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.slate500,
+                        color: AppColors.slate600,
                       )),
                 ],
               ),
@@ -198,19 +206,20 @@ class _HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: () => context.go('/topup'),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                   decoration: BoxDecoration(
-                    color: AppColors.primarySurface,
+                    gradient: AppColors.primaryGradient,
                     borderRadius: BorderRadius.circular(20),
+                    boxShadow: AppColors.shadowPrimary,
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.add_rounded, size: 15, color: AppColors.primary),
+                      Icon(Icons.add_rounded, size: 16, color: Colors.white),
                       SizedBox(width: 5),
                       Text('Isi Saldo',
                           style: TextStyle(
                             fontFamily: 'PlusJakartaSans',
-                            color: AppColors.primary,
+                            color: Colors.white,
                             fontWeight: FontWeight.w700,
                             fontSize: 13,
                           )),
@@ -220,14 +229,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           Row(
             children: [
               Text(
                 _hideBalance ? CurrencyFormatter.maskBalance() : CurrencyFormatter.format(balance),
                 style: const TextStyle(
                   fontFamily: 'PlusJakartaSans',
-                  fontSize: 30,
+                  fontSize: 32,
                   fontWeight: FontWeight.w800,
                   color: AppColors.ink,
                   letterSpacing: -0.5,
@@ -254,16 +263,16 @@ class _HomePageState extends State<HomePage> {
                   child: GestureDetector(
                     onTap: () => context.go(a['route'] as String),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Column(
                         children: [
                           FeatureIcon(
                             icon: a['icon'] as IconData,
                             tone: a['tone'] as String,
-                            size: 46,
-                            iconSize: 22,
+                            size: 48,
+                            iconSize: 23,
                           ),
-                          const SizedBox(height: 7),
+                          const SizedBox(height: 8),
                           Text(a['label'] as String,
                               style: const TextStyle(
                                 fontFamily: 'PlusJakartaSans',
@@ -289,16 +298,23 @@ class _HomePageState extends State<HomePage> {
       children: [
         Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.amberSurface,
+                  Colors.white,
+                ],
+              ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: AppColors.shadowSoft,
             ),
             child: Row(
               children: [
                 const FeatureIcon(
-                    icon: Icons.star_outline_rounded, tone: 'amber', size: 38, iconSize: 19),
+                    icon: Icons.star_outline_rounded, tone: 'amber', size: 40, iconSize: 20),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                     Text('1.250',
                         style: TextStyle(
                             fontFamily: 'PlusJakartaSans',
-                            fontSize: 15,
+                            fontSize: 16,
                             fontWeight: FontWeight.w800,
                             color: AppColors.ink)),
                   ],
@@ -324,16 +340,23 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(width: 10),
         Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.greenSurface,
+                  Colors.white,
+                ],
+              ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: AppColors.shadowSoft,
             ),
             child: Row(
               children: [
                 const FeatureIcon(
-                    icon: Icons.qr_code_rounded, tone: 'green', size: 38, iconSize: 19),
+                    icon: Icons.qr_code_rounded, tone: 'green', size: 40, iconSize: 20),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                     Text('Aktif',
                         style: TextStyle(
                             fontFamily: 'PlusJakartaSans',
-                            fontSize: 15,
+                            fontSize: 16,
                             fontWeight: FontWeight.w800,
                             color: AppColors.ink)),
                   ],
@@ -362,13 +385,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildFeatureGrid() {
     final features = [
-      {'icon': Icons.smartphone_outlined, 'label': 'Pulsa', 'tone': 'blue'},
-      {'icon': Icons.bolt_outlined, 'label': 'PLN', 'tone': 'amber'},
-      {'icon': Icons.restaurant_outlined, 'label': 'Kantin', 'tone': 'red'},
-      {'icon': Icons.receipt_long_outlined, 'label': 'UKT', 'tone': 'violet'},
-      {'icon': Icons.wifi_rounded, 'label': 'Paket Data', 'tone': 'green'},
-      {'icon': Icons.card_giftcard_rounded, 'label': 'Voucher', 'tone': 'red'},
-      {'icon': Icons.favorite_outline_rounded, 'label': 'Donasi', 'tone': 'amber'},
+      {'asset': 'assets/icons/pulsa.png', 'label': 'Pulsa'},
+      {'asset': 'assets/icons/PLN.png', 'label': 'PLN'},
+      {'asset': 'assets/icons/makanan.png', 'label': 'Makanan'},
+      {'asset': 'assets/icons/UKT.png', 'label': 'UKT'},
+      {'asset': 'assets/icons/Paket-Data.png', 'label': 'Paket Data'},
+      {'asset': 'assets/icons/voucher.png', 'label': 'Voucher'},
+      {'asset': 'assets/icons/donasi.png', 'label': 'Donasi'},
       {'icon': Icons.more_horiz_rounded, 'label': 'Lainnya', 'tone': 'slate'},
     ];
     return Container(
@@ -390,8 +413,26 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FeatureIcon(
-                    icon: f['icon'] as IconData, tone: f['tone'] as String, size: 50, iconSize: 24),
+                f.containsKey('asset')
+                    ? Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColors.bg,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: Image.asset(
+                          f['asset'] as String,
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    : FeatureIcon(
+                        icon: f['icon'] as IconData,
+                        tone: f['tone'] as String,
+                        size: 50,
+                        iconSize: 24,
+                      ),
                 const SizedBox(height: 8),
                 Text(f['label'] as String,
                     style: const TextStyle(
@@ -413,39 +454,55 @@ class _HomePageState extends State<HomePage> {
       onTap: () => context.go('/merchant'),
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF0E1726), Color(0xFF21314D)],
+            colors: [
+              AppColors.primary,
+              AppColors.primaryDark,
+            ],
           ),
           borderRadius: BorderRadius.circular(20),
+          boxShadow: AppColors.shadowPrimary,
         ),
         padding: const EdgeInsets.all(16),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             Positioned(
-              right: -30,
-              top: -40,
+              right: -20,
+              top: -30,
               child: Container(
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF5B9BFF).withValues(alpha: 0.18),
+                  color: Colors.white.withValues(alpha: 0.1),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 10,
+              bottom: -20,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withValues(alpha: 0.08),
                 ),
               ),
             ),
             Row(
               children: [
                 Container(
-                  width: 46,
-                  height: 46,
+                  width: 48,
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.12),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Icon(Icons.link_rounded, size: 24, color: Color(0xFF5B9BFF)),
+                  child: const Icon(Icons.link_rounded, size: 24, color: Colors.white),
                 ),
                 const SizedBox(width: 13),
                 const Expanded(
@@ -459,7 +516,7 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           )),
-                      SizedBox(height: 2),
+                      SizedBox(height: 3),
                       Text('Simulasi checkout e-commerce → bayar via DKG',
                           style: TextStyle(
                             fontFamily: 'PlusJakartaSans',
@@ -469,7 +526,15 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right_rounded, size: 20, color: Colors.white60),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.chevron_right_rounded, size: 20, color: Colors.white),
+                ),
               ],
             ),
           ],
@@ -493,13 +558,20 @@ class _HomePageState extends State<HomePage> {
                 )),
             GestureDetector(
               onTap: () => context.go('/history'),
-              child: const Text('Lihat semua',
-                  style: TextStyle(
-                    fontFamily: 'PlusJakartaSans',
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13.5,
-                  )),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.primarySurface,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text('Lihat semua',
+                    style: TextStyle(
+                      fontFamily: 'PlusJakartaSans',
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    )),
+              ),
             ),
           ],
         ),
@@ -511,11 +583,21 @@ class _HomePageState extends State<HomePage> {
             boxShadow: AppColors.shadowSoft,
           ),
           child: txns.isEmpty
-              ? const Padding(
-                  padding: EdgeInsets.all(20),
+              ? Padding(
+                  padding: const EdgeInsets.all(24),
                   child: Center(
-                    child: Text('Belum ada transaksi',
-                        style: TextStyle(color: AppColors.slate400, fontFamily: 'PlusJakartaSans')),
+                    child: Column(
+                      children: [
+                        Icon(Icons.receipt_long_outlined, size: 40, color: AppColors.slate300),
+                        const SizedBox(height: 8),
+                        const Text('Belum ada transaksi',
+                            style: TextStyle(
+                              color: AppColors.slate400,
+                              fontFamily: 'PlusJakartaSans',
+                              fontSize: 14,
+                            )),
+                      ],
+                    ),
                   ),
                 )
               : Column(
