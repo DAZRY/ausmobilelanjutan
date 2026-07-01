@@ -21,8 +21,8 @@ class _BiometricLockScreenState extends State<BiometricLockScreen>
     with WidgetsBindingObserver {
   DateTime? _backgroundedAt;
 
-  // Kunci setelah app di background lebih dari 30 detik
-  static const _lockTimeout = Duration(seconds: 30);
+  // Kunci setelah app di background lebih dari 5 menit
+  static const _lockTimeout = Duration(minutes: 5);
 
   @override
   void initState() {
@@ -55,8 +55,8 @@ class _BiometricLockScreenState extends State<BiometricLockScreen>
 
       case AppLifecycleState.resumed:
         final bg = _backgroundedAt;
+        _backgroundedAt = null;
         if (bg != null && DateTime.now().difference(bg) >= _lockTimeout) {
-          _backgroundedAt = null;
           // Defer ke frame berikutnya agar element sudah active
           // sebelum notifyListeners() dipanggil oleh lock()/unlock()
           WidgetsBinding.instance.addPostFrameCallback((_) {
