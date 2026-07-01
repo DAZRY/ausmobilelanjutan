@@ -130,7 +130,7 @@ class _TwoFASmtpPageState extends State<TwoFASmtpPage> {
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 80),
                         transform: _hasError
-                            ? (Matrix4.identity()..translate(8.0))
+                            ? Matrix4.translationValues(8.0, 0, 0)
                             : Matrix4.identity(),
                         child: CodeInput(
                             value: _code,
