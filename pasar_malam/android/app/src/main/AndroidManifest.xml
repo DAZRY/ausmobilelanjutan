@@ -44,6 +44,16 @@
                     android:scheme="pasarmalam"
                     android:host="open" />
             </intent-filter>
+
+            <!-- Payment callback intent filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="pasarmalam"
+                    android:host="payment-callback" />
+            </intent-filter>
         </activity>
 
         <meta-data
