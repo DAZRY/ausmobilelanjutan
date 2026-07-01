@@ -123,3 +123,20 @@ func (h *CartHandler) RemoveFromCart(c *gin.Context) {
 		"message": "Produk dihapus dari cart",
 	})
 }
+
+func (h *CartHandler) ClearCart(c *gin.Context) {
+	userID := c.GetUint("user_id")
+
+	if err := h.db.Where("user_id = ?", userID).Delete(&models.Cart{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "Gagal mengosongkan cart",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "Cart dikosongkan",
+	})
+}
