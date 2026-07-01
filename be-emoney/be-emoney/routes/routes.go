@@ -26,6 +26,7 @@ func Setup(db *gorm.DB, rdb *redis.Client, firebaseApp *firebase.App, cfg *confi
 	paymentHandler := handlers.NewPaymentHandler(db, otpSvc)
 	productHandler := handlers.NewProductHandler(db)
 	cartHandler := handlers.NewCartHandler(db)
+	orderHandler := handlers.NewOrderHandler(db)
 
 	v1 := r.Group("/v1")
 	{
@@ -86,6 +87,15 @@ func Setup(db *gorm.DB, rdb *redis.Client, firebaseApp *firebase.App, cfg *confi
 			cart.GET("", cartHandler.GetCart)
 			cart.POST("", cartHandler.AddToCart)
 			cart.DELETE("/:id", cartHandler.RemoveFromCart)
+			cart.DELETE("", cartHandler.ClearCart)
+		}
+
+		orders := v1.Group("/orders")
+		orders.Use(middleware.AuthMiddleware(jwtSvc))
+		{
+			orders.POST("/checkout", orderHandler.Checkout)
+			orders.GET("", orderHandler.GetMyOrders)
+			orders.GET("/:id", orderHandler.GetOrder)
 		}
 	}
 
