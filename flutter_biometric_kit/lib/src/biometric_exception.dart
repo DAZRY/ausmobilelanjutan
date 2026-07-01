@@ -1,3 +1,5 @@
+import 'package:local_auth/local_auth.dart';
+
 enum BiometricErrorCode {
   noBiometricHardware,
   notEnrolled,
@@ -19,18 +21,17 @@ class BiometricException implements Exception {
     required this.userMessage,
   });
 
-  /// Konstruksi dari platform error code yang dikembalikan MethodChannel.
-  factory BiometricException.fromPlatform(String errorCode, String? description) {
-    final String desc = description ?? '-';
+  factory BiometricException.fromLocalAuthException(LocalAuthException e) {
+    final String desc = e.description ?? '-';
 
-    switch (errorCode) {
-      case 'noBiometricHardware':
+    switch (e.code) {
+      case LocalAuthExceptionCode.noBiometricHardware:
         return BiometricException(
           code: BiometricErrorCode.noBiometricHardware,
           message: 'noBiometricHardware: $desc',
           userMessage: 'Perangkat tidak memiliki sensor biometrik.',
         );
-      case 'noBiometricsEnrolled':
+      case LocalAuthExceptionCode.noBiometricsEnrolled:
         return BiometricException(
           code: BiometricErrorCode.notEnrolled,
           message: 'biometricNotEnrolled: $desc',
@@ -38,26 +39,26 @@ class BiometricException implements Exception {
               'Belum ada sidik jari atau wajah tersimpan. '
               'Silakan daftarkan di Pengaturan > Keamanan.',
         );
-      case 'temporaryLockout':
+      case LocalAuthExceptionCode.temporaryLockout:
         return BiometricException(
           code: BiometricErrorCode.temporaryLockout,
           message: 'temporaryLockout: $desc',
           userMessage: 'Terlalu banyak percobaan gagal. Tunggu lalu coba lagi.',
         );
-      case 'biometricLockout':
+      case LocalAuthExceptionCode.biometricLockout:
         return BiometricException(
           code: BiometricErrorCode.biometricLockout,
           message: 'biometricLockout: $desc',
           userMessage:
               'Biometrik dikunci. Buka kunci perangkat dengan PIN dulu.',
         );
-      case 'userCanceled':
+      case LocalAuthExceptionCode.userCanceled:
         return BiometricException(
           code: BiometricErrorCode.userCanceled,
           message: 'userCanceled: $desc',
           userMessage: 'Autentikasi dibatalkan.',
         );
-      case 'systemCanceled':
+      case LocalAuthExceptionCode.systemCanceled:
         return BiometricException(
           code: BiometricErrorCode.systemCanceled,
           message: 'systemCanceled: $desc',
@@ -66,7 +67,7 @@ class BiometricException implements Exception {
       default:
         return BiometricException(
           code: BiometricErrorCode.unknown,
-          message: 'unknown [$errorCode]: $desc',
+          message: 'unknown [${e.code}]: $desc',
           userMessage: 'Terjadi kesalahan tidak terduga. Silakan coba lagi.',
         );
     }
