@@ -75,7 +75,7 @@ class _SplashPageState extends State<SplashPage> {
                   child: Column(
                     children: [
                       const Spacer(),
-                      const AppLogo(size: 92, light: true),
+                      const AppLogo(size: 170, light: true),
                       const SizedBox(height: 26),
                       const Text(
                         'Dompet Kampus',
